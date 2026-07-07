@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git &amp; GitHub Cheatsheet</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #11161d;
+    --line: #232b35;
+    --text: #d7dee5;
+    --muted: #8b96a3;
+    --accent: #5fd68f;
+    --accent-dim: #2f6b49;
+    --amber: #e3b341;
+    --code-bg: #161d26;
+    --header-bg: #161d26;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "SF Mono", "Consolas", "Menlo", monospace;
+    line-height: 1.5;
+    padding: 0 0 80px 0;
+  }
+
+  .topbar {
+    border-bottom: 1px solid var(--line);
+    padding: 48px 24px 32px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .prompt {
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .prompt::before { content: "$ "; color: var(--muted); }
+
+  h1 {
+    font-size: 34px;
+    margin: 0 0 8px 0;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 14.5px;
+    max-width: 640px;
+  }
+
+  nav.toc {
+    max-width: 980px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  nav.toc a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12.5px;
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 4px;
+    background: var(--panel);
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  nav.toc a:hover {
+    border-color: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section {
+    margin-top: 56px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .step-num {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid var(--accent-dim);
+    background: rgba(95, 214, 143, 0.08);
+    padding: 2px 9px;
+    border-radius: 100px;
+  }
+
+  h2 {
+    font-size: 20px;
+    color: #fff;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 13.5px;
+    margin: 8px 0 20px 0;
+    max-width: 720px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  thead th {
+    background: var(--header-bg);
+    text-align: left;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(255,255,255,0.015); }
+
+  td.cmd, code {
+    font-family: "SF Mono", "Consolas", "Menlo", monospace;
+    color: var(--accent);
+    background: var(--code-bg);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 12.8px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  td.desc { color: var(--text); }
+
+  td.desc .note {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  col.col-cmd { width: 34%; }
+  col.col-desc { width: 66%; }
+
+  .callout {
+    margin-top: 14px;
+    border-left: 3px solid var(--amber);
+    background: rgba(227, 179, 65, 0.06);
+    padding: 10px 14px;
+    font-size: 12.8px;
+    color: var(--muted);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .callout strong { color: var(--amber); }
+
+  footer {
+    max-width: 980px;
+    margin: 64px auto 0;
+    padding: 24px 24px 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    td.cmd, code { white-space: normal; word-break: break-word; }
+    h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="prompt">reference / version control</div>
+  <h1>Git &amp; GitHub Cheatsheet</h1>
+  <div class="subtitle">A start-to-finish walkthrough of the commands you'll actually use — from installing Git to opening your first pull request and beyond.</div>
+</div>
+
+<nav class="toc">
+  <a href="#setup">01 Setup</a>
+  <a href="#start">02 Starting a Project</a>
+  <a href="#stage">03 Stage &amp; Commit</a>
+  <a href="#branch">04 Branching</a>
+  <a href="#remote">05 Remotes &amp; GitHub</a>
+  <a href="#sync">06 Sync (Push/Pull/Fetch)</a>
+  <a href="#history">07 Inspecting History</a>
+  <a href="#undo">08 Undoing Things</a>
+  <a href="#stash">09 Stash &amp; Clean</a>
+  <a href="#collab">10 Collaboration on GitHub</a>
+  <a href="#advanced">11 Advanced</a>
+  <a href="#gitignore">12 .gitignore Patterns</a>
+</nav>
+
+<main>
+
+  <section id="setup">
+    <div class="section-head"><span class="step-num">01</span><h2>Setup &amp; Configuration</h2></div>
+    <p class="section-desc">Run once after installing Git, so every commit is signed with your identity.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git --version</td><td class="desc">Check that Git is installed and see its version</td></tr>
+        <tr><td class="cmd">git config --global user.name "Name"</td><td class="desc">Set the name attached to your commits</td></tr>
+        <tr><td class="cmd">git config --global user.email "you@example.com"</td><td class="desc">Set the email attached to your commits</td></tr>
+        <tr><td class="cmd">git config --global init.defaultBranch main</td><td class="desc">Make new repos default to a branch named <code>main</code></td></tr>
+        <tr><td class="cmd">git config --list</td><td class="desc">Show all current configuration values</td></tr>
+        <tr><td class="cmd">git config --global core.editor "code --wait"</td><td class="desc">Set your default editor (example: VS Code)<span class="note">Swap in vim, nano, subl, etc. as preferred</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="start">
+    <div class="section-head"><span class="step-num">02</span><h2>Starting a Project</h2></div>
+    <p class="section-desc">Every project either begins fresh locally or is copied down from GitHub.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git init</td><td class="desc">Turn the current folder into a new Git repository</td></tr>
+        <tr><td class="cmd">git clone &lt;url&gt;</td><td class="desc">Copy an existing remote repository (e.g. from GitHub) to your machine</td></tr>
+        <tr><td class="cmd">git clone &lt;url&gt; &lt;folder-name&gt;</td><td class="desc">Clone into a folder with a custom name</td></tr>
+        <tr><td class="cmd">git status</td><td class="desc">Show changed, staged, and untracked files right now<span class="note">The command you'll run more than any other</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="stage">
+    <div class="section-head"><span class="step-num">03</span><h2>Staging &amp; Committing</h2></div>
+    <p class="section-desc">The core loop: edit files, stage the changes you want to save, then commit them with a message.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git add &lt;file&gt;</td><td class="desc">Stage a specific file</td></tr>
+        <tr><td class="cmd">git add .</td><td class="desc">Stage all changed files in the current directory</td></tr>
+        <tr><td class="cmd">git add -p</td><td class="desc">Interactively stage changes hunk by hunk</td></tr>
+        <tr><td class="cmd">git commit -m "message"</td><td class="desc">Save staged changes as a new commit with a message</td></tr>
+        <tr><td class="cmd">git commit -am "message"</td><td class="desc">Stage all tracked, modified files and commit in one step<span class="note">Skips new (untracked) files</span></td></tr>
+        <tr><td class="cmd">git commit --amend</td><td class="desc">Edit the message or contents of the last commit</td></tr>
+        <tr><td class="cmd">git diff</td><td class="desc">Show unstaged changes since the last commit</td></tr>
+        <tr><td class="cmd">git diff --staged</td><td class="desc">Show staged changes not yet committed</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="branch">
+    <div class="section-head"><span class="step-num">04</span><h2>Branching &amp; Merging</h2></div>
+    <p class="section-desc">Branches let you work on features in isolation before folding them back in.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git branch</td><td class="desc">List local branches (current branch is starred)</td></tr>
+        <tr><td class="cmd">git branch &lt;name&gt;</td><td class="desc">Create a new branch</td></tr>
+        <tr><td class="cmd">git switch &lt;name&gt;</td><td class="desc">Switch to an existing branch</td></tr>
+        <tr><td class="cmd">git switch -c &lt;name&gt;</td><td class="desc">Create a branch and switch to it in one step</td></tr>
+        <tr><td class="cmd">git checkout &lt;name&gt;</td><td class="desc">Older equivalent of <code>git switch</code></td></tr>
+        <tr><td class="cmd">git merge &lt;branch&gt;</td><td class="desc">Merge the named branch into your current branch</td></tr>
+        <tr><td class="cmd">git branch -d &lt;name&gt;</td><td class="desc">Delete a branch that's already merged</td></tr>
+        <tr><td class="cmd">git branch -D &lt;name&gt;</td><td class="desc">Force-delete a branch, merged or not</td></tr>
+        <tr><td class="cmd">git branch -m &lt;new-name&gt;</td><td class="desc">Rename the current branch</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><strong>Tip:</strong> keep <code>main</code> always deployable — do your work on a feature branch and merge in once it's reviewed.</div>
+  </section>
+
+  <section id="remote">
+    <div class="section-head"><span class="step-num">05</span><h2>Connecting to GitHub (Remotes)</h2></div>
+    <p class="section-desc">A "remote" is a pointer to a repository hosted elsewhere, typically GitHub.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git remote -v</td><td class="desc">List remotes and their URLs</td></tr>
+        <tr><td class="cmd">git remote add origin &lt;url&gt;</td><td class="desc">Link a local repo to a GitHub repo, named <code>origin</code></td></tr>
+        <tr><td class="cmd">git remote set-url origin &lt;url&gt;</td><td class="desc">Change the URL of an existing remote</td></tr>
+        <tr><td class="cmd">git remote remove origin</td><td class="desc">Unlink a remote</td></tr>
+        <tr><td class="cmd">gh repo create</td><td class="desc">Create a new GitHub repo from the terminal<span class="note">Requires the GitHub CLI (gh)</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="sync">
+    <div class="section-head"><span class="step-num">06</span><h2>Syncing: Push, Pull &amp; Fetch</h2></div>
+    <p class="section-desc">Moving commits between your machine and GitHub.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git push -u origin main</td><td class="desc">Push and link your local branch to origin/main for the first time</td></tr>
+        <tr><td class="cmd">git push</td><td class="desc">Push committed changes to the linked remote branch</td></tr>
+        <tr><td class="cmd">git push origin &lt;branch&gt;</td><td class="desc">Push a specific branch to GitHub</td></tr>
+        <tr><td class="cmd">git fetch</td><td class="desc">Download remote changes without merging them into your work</td></tr>
+        <tr><td class="cmd">git pull</td><td class="desc">Fetch and merge remote changes into your current branch</td></tr>
+        <tr><td class="cmd">git pull --rebase</td><td class="desc">Fetch and replay your local commits on top instead of merging</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="history">
+    <div class="section-head"><span class="step-num">07</span><h2>Inspecting History</h2></div>
+    <p class="section-desc">Ways to look back at what's happened in the repository.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git log</td><td class="desc">Show commit history, newest first</td></tr>
+        <tr><td class="cmd">git log --oneline --graph --all</td><td class="desc">Compact, visual history across all branches</td></tr>
+        <tr><td class="cmd">git show &lt;commit&gt;</td><td class="desc">Show the details and diff of a specific commit</td></tr>
+        <tr><td class="cmd">git blame &lt;file&gt;</td><td class="desc">Show who last changed each line of a file</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="undo">
+    <div class="section-head"><span class="step-num">08</span><h2>Undoing Things</h2></div>
+    <p class="section-desc">Mistakes are normal — Git has a command for almost every kind of "oops."</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git restore &lt;file&gt;</td><td class="desc">Discard unstaged changes in a file</td></tr>
+        <tr><td class="cmd">git restore --staged &lt;file&gt;</td><td class="desc">Unstage a file, keeping its edits</td></tr>
+        <tr><td class="cmd">git reset --soft HEAD~1</td><td class="desc">Undo the last commit, keep changes staged</td></tr>
+        <tr><td class="cmd">git reset --mixed HEAD~1</td><td class="desc">Undo the last commit, keep changes unstaged</td></tr>
+        <tr><td class="cmd">git reset --hard HEAD~1</td><td class="desc">Undo the last commit and discard its changes entirely<span class="note">Destructive — no way back once run</span></td></tr>
+        <tr><td class="cmd">git revert &lt;commit&gt;</td><td class="desc">Create a new commit that undoes a previous one<span class="note">Safe for commits already pushed/shared</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="stash">
+    <div class="section-head"><span class="step-num">09</span><h2>Stash &amp; Clean</h2></div>
+    <p class="section-desc">Temporarily set aside work, or clear out files Git isn't tracking.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git stash</td><td class="desc">Shelve current changes and return to a clean working directory</td></tr>
+        <tr><td class="cmd">git stash list</td><td class="desc">Show all stashed changesets</td></tr>
+        <tr><td class="cmd">git stash pop</td><td class="desc">Reapply the most recent stash and remove it from the list</td></tr>
+        <tr><td class="cmd">git stash drop</td><td class="desc">Delete a stash without applying it</td></tr>
+        <tr><td class="cmd">git clean -fd</td><td class="desc">Remove untracked files and directories<span class="note">Use <code>-n</code> first to preview what would be deleted</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="collab">
+    <div class="section-head"><span class="step-num">10</span><h2>Collaboration on GitHub</h2></div>
+    <p class="section-desc">The parts of the workflow that live on GitHub itself, plus the CLI shortcuts for them.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command / Action</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">Fork</td><td class="desc">Copy someone else's repo to your own GitHub account to work on independently</td></tr>
+        <tr><td class="cmd">gh repo fork &lt;owner/repo&gt;</td><td class="desc">Fork a repo from the terminal (GitHub CLI)</td></tr>
+        <tr><td class="cmd">Pull Request (PR)</td><td class="desc">A request to merge changes from one branch/fork into another, opened on GitHub.com</td></tr>
+        <tr><td class="cmd">gh pr create</td><td class="desc">Open a pull request from your current branch</td></tr>
+        <tr><td class="cmd">gh pr list</td><td class="desc">List open pull requests on the repo</td></tr>
+        <tr><td class="cmd">gh pr checkout &lt;number&gt;</td><td class="desc">Check out someone else's PR locally to test it</td></tr>
+        <tr><td class="cmd">gh pr merge &lt;number&gt;</td><td class="desc">Merge an approved pull request</td></tr>
+        <tr><td class="cmd">gh issue create</td><td class="desc">Open a new issue on the repo</td></tr>
+        <tr><td class="cmd">gh issue list</td><td class="desc">List open issues</td></tr>
+        <tr><td class="cmd">CODEOWNERS / Branch protection</td><td class="desc">Repo settings that require review before merging to <code>main</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="advanced">
+    <div class="section-head"><span class="step-num">11</span><h2>Advanced Git</h2></div>
+    <p class="section-desc">Reach for these once the basics are comfortable.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">git rebase &lt;branch&gt;</td><td class="desc">Replay your commits on top of another branch for a linear history</td></tr>
+        <tr><td class="cmd">git rebase -i HEAD~3</td><td class="desc">Interactively reorder, squash, or edit the last 3 commits</td></tr>
+        <tr><td class="cmd">git cherry-pick &lt;commit&gt;</td><td class="desc">Apply one specific commit from another branch onto yours</td></tr>
+        <tr><td class="cmd">git tag v1.0.0</td><td class="desc">Mark the current commit as a named release point</td></tr>
+        <tr><td class="cmd">git push --tags</td><td class="desc">Push local tags to the remote</td></tr>
+        <tr><td class="cmd">git bisect start</td><td class="desc">Binary-search commit history to find which one introduced a bug</td></tr>
+        <tr><td class="cmd">git submodule add &lt;url&gt;</td><td class="desc">Embed another repo inside this one as a submodule</td></tr>
+        <tr><td class="cmd">git reflog</td><td class="desc">Show a log of everywhere HEAD has pointed — a safety net for recovering "lost" commits</td></tr>
+        <tr><td class="cmd">git worktree add &lt;path&gt; &lt;branch&gt;</td><td class="desc">Check out another branch into a separate folder simultaneously</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="gitignore">
+    <div class="section-head"><span class="step-num">12</span><h2>.gitignore Patterns</h2></div>
+    <p class="section-desc">Common syntax for telling Git which files to never track.</p>
+    <table>
+      <colgroup><col class="col-cmd"><col class="col-desc"></colgroup>
+      <thead><tr><th>Pattern</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd">node_modules/</td><td class="desc">Ignore a folder and everything inside it</td></tr>
+        <tr><td class="cmd">*.log</td><td class="desc">Ignore every file with a given extension</td></tr>
+        <tr><td class="cmd">.env</td><td class="desc">Ignore a specific file by name</td></tr>
+        <tr><td class="cmd">!important.log</td><td class="desc">Negate a pattern — always track this file even if a rule above ignores it</td></tr>
+        <tr><td class="cmd">/build</td><td class="desc">Only ignore <code>build</code> at the repo root, not nested ones</td></tr>
+        <tr><td class="cmd">git rm -r --cached &lt;file&gt;</td><td class="desc">Stop tracking a file that's already committed, without deleting it locally</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  Git &amp; GitHub Cheatsheet — a quick reference from first commit to first pull request.
+</footer>
+
+</body>
+</html>
