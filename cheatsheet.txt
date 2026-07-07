@@ -1,0 +1,1 @@
+The git and GitHub cheat sheet is added to index.html
